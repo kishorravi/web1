@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AR.js Example</title>
-    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-    <script src="https://cdn.rawgit.com/jeromeetienne/AR.js/2.0.8/aframe/build/aframe-ar.js"></script>
+    <title>Face Detection</title>
 </head>
 <body>
-    <a-scene embedded arjs>
-        <a-marker preset="hiro">
-            <a-box position='0 0.5 0' material='color: red;'></a-box>
-        </a-marker>
-        <a-entity camera></a-entity>
-    </a-scene>
+    <h1>Face Detection</h1>
+    <img id="video_feed" src="{{ url_for('video_feed') }}" alt="Webcam Feed">
+    <script>
+        const video = document.getElementById('video_feed');
+        video.width = window.innerWidth;
+        video.height = window.innerHeight;
+    </script>
 </body>
 </html>
+
