@@ -1,20 +1,18 @@
-<!-- templates/index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Face Detection</title>
+    <title>Add Furniture to Room</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Face Detection</h1>
     <input type="file" id="imageInput" accept="image/*">
-    <button onclick="detectFaces()">Detect Faces</button>
+    <button onclick="addFurniture()">Add Sofa</button>
     <br>
     <img id="resultImage" alt="Result" style="display:none;">
-    
     <script>
-        function detectFaces() {
+        function addFurniture() {
             var input = document.getElementById('imageInput');
             var file = input.files[0];
 
@@ -25,13 +23,18 @@
                     img.src = e.target.result;
                     img.style.display = 'block';
 
-                    // Send image data to server for face detection
-                    fetch('/detect', {
+                    // Send image data and furniture position to server
+                    var furnitureX = 100; // Set the X position of the furniture
+                    var furnitureY = 150; // Set the Y position of the furniture
+
+                    fetch('/add_furniture', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded',
                         },
-                        body: 'image=' + encodeURIComponent(e.target.result),
+                        body: 'image=' + encodeURIComponent(e.target.result) +
+                              '&furnitureX=' + furnitureX +
+                              '&furnitureY=' + furnitureY,
                     })
                     .then(response => response.json())
                     .then(data => {
