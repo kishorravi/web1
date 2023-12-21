@@ -1,3 +1,4 @@
+<!-- templates/index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,12 +8,39 @@
 </head>
 <body>
     <h1>Face Detection</h1>
-    <img id="video_feed" src="{{ url_for('video_feed') }}" alt="Webcam Feed">
+    <input type="file" id="imageInput" accept="image/*">
+    <button onclick="detectFaces()">Detect Faces</button>
+    <br>
+    <img id="resultImage" alt="Result" style="display:none;">
+    
     <script>
-        const video = document.getElementById('video_feed');
-        video.width = window.innerWidth;
-        video.height = window.innerHeight;
+        function detectFaces() {
+            var input = document.getElementById('imageInput');
+            var file = input.files[0];
+
+            if (file) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    var img = document.getElementById('resultImage');
+                    img.src = e.target.result;
+                    img.style.display = 'block';
+
+                    // Send image data to server for face detection
+                    fetch('/detect', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: 'image=' + encodeURIComponent(e.target.result),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        img.src = 'data:image/jpeg;base64,' + data.image;
+                    });
+                };
+                reader.readAsDataURL(file);
+            }
+        }
     </script>
 </body>
 </html>
-
